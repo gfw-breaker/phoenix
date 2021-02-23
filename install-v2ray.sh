@@ -1,6 +1,8 @@
 #!/bin/bash
 # author: gfw-breaker(翻墙教练)
 
+yum install -y unzip wget git netools epel-release socat netcat
+
 pkg_url="https://github.com/v2fly/v2ray-core/releases/download/v4.34.0/v2ray-linux-64.zip"
 tmp_dir=/tmp/v2ray
 
@@ -27,5 +29,12 @@ cp -f config.json $config_dir
 
 # start service
 systemctl start v2ray
+
+
+# Setup nginx
+yum install -y nginx
+cd /root
+git clone https://github.com/acmesh-official/acme.sh
+cd acme.sh
 
 
