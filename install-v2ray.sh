@@ -12,11 +12,7 @@ unzip v2ray.zip -d $tmp_dir
 
 cp $tmp_dir/v2ray /usr/local/bin
 cp $tmp_dir/v2ctl /usr/local/bin
-
-
-# enable daemon
 cp -f "$tmp_dir/systemd/system/v2ray.service" "/lib/systemd/system/"
-systemctl enable v2ray
 
 
 # generate config
@@ -57,6 +53,7 @@ done
 # setup nginx
 yum install -y nginx
 
+
 curl  https://get.acme.sh | sh 
 
 /.acme.sh/acme.sh --issue -d $domainname --standalone
@@ -66,7 +63,9 @@ sed "s/#domainname#/$domainname/g" nginx.conf > /etc/nginx/nginx.conf
 
 
 # start services
-service nginx restart
+systemctl enable nginx
+systemctl enable v2ray
+systemctl start nginx
 systemctl start v2ray
 
 
