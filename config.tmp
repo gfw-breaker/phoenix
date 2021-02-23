@@ -1,0 +1,30 @@
+{
+  "inbounds": [
+    {
+      "port": 443,
+      "listen":"127.0.0.1",
+      "protocol": "vmess",
+      "settings": {
+        "decryption": "none",
+        "clients": [
+          {
+            "id": "#uuid#",
+            "level": 0
+          }
+        ]
+      },
+      "streamSettings": {
+        "network": "ws",
+        "wsSettings": {
+        "path": "/ray"
+        }
+      }
+    }
+  ],
+  "outbounds": [
+    {
+      "protocol": "freedom",
+      "settings": {}
+    }
+  ]
+}

@@ -17,3 +17,15 @@ cp -f "$tmp_dir/systemd/system/v2ray.service" "/lib/systemd/system/"
 systemctl enable v2ray
 
 
+# generate config
+config_dir=/usr/local/etc/v2ray
+mkdir -p $config_dir
+uuid=$(v2ctl uuid)
+sed "s/#uuid#/$uuid/g" config.tmp > config.json
+cp -f config.json $config_dir
+
+
+# start service
+systemctl start v2ray
+
+
