@@ -33,6 +33,8 @@ systemctl start v2ray
 
 # Setup nginx
 yum install -y nginx
+cat nginx.tmp > /etc/nginx/nginx.conf
+
 cd /root
 git clone https://github.com/acmesh-official/acme.sh
 cd acme.sh
