@@ -62,7 +62,7 @@ curl  https://get.acme.sh | sh
 /.acme.sh/acme.sh --issue -d $domainname --standalone
 /.acme.sh/acme.sh --installcert -d $domainname  --fullchainpath /etc/ssl/v2ray.crt --keypath /etc/ssl/v2ray.key
 
-sed -i "s/#domainname#/$domainname/g" nginx.conf > /etc/nginx/nginx.conf
+sed "s/#domainname#/$domainname/g" nginx.conf > /etc/nginx/nginx.conf
 
 
 # start services
