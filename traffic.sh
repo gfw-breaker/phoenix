@@ -20,31 +20,7 @@ apidata () {
     }'
 }
 
-print_sum() {
-    local DATA="$1"
-    local PREFIX="$2"
-    local SORTED=$(echo "$DATA" | grep "^${PREFIX}" | sort -r)
-    local SUM=$(echo "$SORTED" | awk '
-        /->up/{us+=$2}
-        /->down/{ds+=$2}
-        END{
-            printf "SUM->up:\t%.0f\nSUM->down:\t%.0f\nSUM->TOTAL:\t%.0f\n", us, ds, us+ds;
-        }')
-    echo -e "${SORTED}\n${SUM}" \
-    | numfmt --field=2 --suffix=B --to=iec \
-    | column -t
-}
 
-DATA=$(apidata $1)
-echo "------------Inbound----------"
-print_sum "$DATA" "inbound"
-echo "-----------------------------"
-echo "------------Outbound----------"
-print_sum "$DATA" "outbound"
-echo "-----------------------------"
-echo
-echo "-------------User------------"
-print_sum "$DATA" "user"
-echo "-----------------------------"
+apidata | grep 'user:' | grep '\->down' | sed -e 's/user://g' -e 's/->down//g' 
 
 
