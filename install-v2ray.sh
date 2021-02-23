@@ -1,7 +1,7 @@
 #!/bin/bash
 # author: gfw-breaker(翻墙教练)
 
-yum install -y unzip wget git netools epel-release socat netcat
+yum install -y unzip wget git net-tools epel-release socat netcat
 
 pkg_url="https://github.com/v2fly/v2ray-core/releases/download/v4.34.0/v2ray-linux-64.zip"
 tmp_dir=/tmp/v2ray
@@ -33,10 +33,12 @@ systemctl start v2ray
 
 # Setup nginx
 yum install -y nginx
-cat nginx.tmp > /etc/nginx/nginx.conf
 
-cd /root
-git clone https://github.com/acmesh-official/acme.sh
-cd acme.sh
+curl  https://get.acme.sh | sh 
+#./.acme.sh/acme.sh --issue -d s2.vvtest.xyz --standalone
+#./.acme.sh/acme.sh --installcert -d s2.vvtest.xyz  --fullchainpath /etc/v2ray/v2ray.crt --keypath /etc/v2ray/v2ray.key
+
+#cat nginx.tmp > /etc/nginx/nginx.conf
+
 
 
