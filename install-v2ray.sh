@@ -23,22 +23,39 @@ systemctl enable v2ray
 config_dir=/usr/local/etc/v2ray
 mkdir -p $config_dir
 uuid=$(v2ctl uuid)
-sed "s/#uuid#/$uuid/g" config.tmp > config.json
 cp -f config.json $config_dir
 
 
-# start service
-systemctl start v2ray
+# get domain name, fail if DNS record is not created in 10 mins 
+ip=$(/usr/sbin/ifconfig eth0 | grep "inet " | awk '{print $2}')
+url=http://gfw-breaker.win/dns/$ip
+for i in {1..20}; do
+	domainname=$(curl $url)	
+	echo $domainname | grep '//' > /dev/null
+	if [ $? -eq 0 ]; then
+		echo "waiting for DNS name ..."
+		sleep 30
+	else
+		domainname=$(echo $domainname | head -n 1 | awk '{print $1}')	
+	fi
+done
 
 
-# Setup nginx
+# setup nginx
 yum install -y nginx
 
 curl  https://get.acme.sh | sh 
-#./.acme.sh/acme.sh --issue -d s2.vvtest.xyz --standalone
-#./.acme.sh/acme.sh --installcert -d s2.vvtest.xyz  --fullchainpath /etc/ssl/v2ray.crt --keypath /etc/ssl/v2ray.key
 
-#cat nginx.tmp > /etc/nginx/nginx.conf
+/.acme.sh/acme.sh --issue -d $domainname --standalone
+/.acme.sh/acme.sh --installcert -d $domainname  --fullchainpath /etc/ssl/v2ray.crt --keypath /etc/ssl/v2ray.key
+
+sed -i "s/#domainname#/$domainname/g" nginx.conf > /etc/nginx/nginx.conf
+
+
+# start services
+service nginx restart
+systemctl start v2ray
+
 
 
 
