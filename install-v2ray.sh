@@ -56,8 +56,10 @@ yum install -y nginx
 
 curl  https://get.acme.sh | sh 
 
-/.acme.sh/acme.sh --issue -d $domainname --standalone
-/.acme.sh/acme.sh --installcert -d $domainname  --fullchainpath /etc/ssl/v2ray.crt --keypath /etc/ssl/v2ray.key
+folder=$(find / -name .acme.sh)
+
+$folder/acme.sh --issue -d $domainname --standalone
+$folder/acme.sh --installcert -d $domainname  --fullchainpath /etc/ssl/v2ray.crt --keypath /etc/ssl/v2ray.key
 
 sed "s/#domainname#/$domainname/g" nginx.conf > /etc/nginx/nginx.conf
 
