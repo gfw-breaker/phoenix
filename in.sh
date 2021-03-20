@@ -28,7 +28,7 @@ yum install -y nginx
 
 openssl req -x509 -nodes -days 365 -newkey rsa:2048 -keyout  /etc/nginx/server.key -out  /etc/nginx/server.crt -subj "/C=US/ST=Zhejiang/L=Hangzhou/O=mofei/OU=mofei/CN=v2ray.kkk"
 
-cp nnew.conf /etc/nginx
+cp nnew.conf /etc/nginx/nginx.conf
 
 # start services
 systemctl enable nginx
