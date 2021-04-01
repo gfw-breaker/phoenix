@@ -37,5 +37,10 @@ systemctl start nginx
 systemctl start v2ray
 
 
+# install python3
+yum install -y python3
+python3 -m pip install --upgrade pip
+python3 -m pip install --upgrade setuptools
+python3 -m pip install grpcio requests protobuf uuid
 
 
