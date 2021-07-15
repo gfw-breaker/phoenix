@@ -12,6 +12,7 @@ unzip v2ray.zip -d $tmp_dir
 cp $tmp_dir/v2ray /usr/local/bin
 cp $tmp_dir/v2ctl /usr/local/bin
 cp -f "$tmp_dir/systemd/system/v2ray.service" "/lib/systemd/system/"
+sed -i '/nobody/d' /lib/systemd/system/v2ray.service
 
 
 # generate config
