@@ -1,5 +1,4 @@
 #!/bin/bash
-# author: gfw-breaker(翻墙教练)
 
 yum install -y unzip wget git net-tools epel-release socat netcat bind-utils
 
@@ -19,50 +18,16 @@ cp -f "$tmp_dir/systemd/system/v2ray.service" "/lib/systemd/system/"
 config_dir=/usr/local/etc/v2ray
 mkdir -p $config_dir
 uuid=$(v2ctl uuid)
-cp -f config.json $config_dir
-
-
-# get domain name, fail if DNS record is not created in 10 mins 
-ip=$(/usr/sbin/ifconfig eth0 | grep "inet " | awk '{print $2}')
-url=http://gfw-breaker.win/dns/$ip
-for i in {1..20}; do
-	domainname=$(curl $url)	
-	echo $domainname | grep '//' > /dev/null
-	if [ $? -eq 0 ]; then
-		echo "DNS record is not created yet. Waiting ..."
-		sleep 30
-	else
-		domainname=$(echo $domainname | head -n 1 | awk '{print $1}')	
-		break
-	fi
-done
-
-
-# check domain name can be resolved
-for i in {1..20}; do
-	host $domainname
-	if [ $? -eq 0 ]; then
-		break
-	else
-		echo "DNS record can't be resolved. Waiting ..."
-		sleep 30
-	fi
-done
+cp -f templates/config.json $config_dir
 
 
 # setup nginx
 yum install -y nginx
 
+openssl req -x509 -nodes -days 365 -newkey rsa:2048 -keyout  /etc/nginx/server.key -out  /etc/nginx/server.crt -subj "/C=US/ST=Zhejiang/L=Hangzhou/O=mofei/OU=mofei/CN=v2ray.kkk"
 
-curl  https://get.acme.sh | sh 
-
-folder=$(find / -name .acme.sh)
-
-$folder/acme.sh --issue -d $domainname --standalone
-$folder/acme.sh --installcert -d $domainname  --fullchainpath /etc/ssl/v2ray.crt --keypath /etc/ssl/v2ray.key
-
-sed "s/#domainname#/$domainname/g" nginx.conf > /etc/nginx/nginx.conf
-
+cp templates/nginx.conf /etc/nginx/
+cp templates/host.txt /etc/nginx/
 
 # start services
 systemctl enable nginx
@@ -71,5 +36,10 @@ systemctl start nginx
 systemctl start v2ray
 
 
+# install python3
+yum install -y python3
+python3 -m pip install --upgrade pip
+python3 -m pip install --upgrade setuptools
+python3 -m pip install grpcio requests protobuf uuid
 
 
