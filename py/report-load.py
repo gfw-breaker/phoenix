@@ -9,7 +9,6 @@ bandwidth = os.environ.get('FREE_BANDWIDTH')
 
 node = api.getNodeMd5(sys.argv[1])
 
-
 if bandwidth is None:
 	bandwidth = 1000
 else:
@@ -34,16 +33,8 @@ def getLoad():
 	return math.ceil(avgLoad)
 
 
-authToken = api.getToken()
-print("token:" + authToken)
-bearer = "Bearer %s" % authToken
 url = "%s/ipoint" % apiEndpoint
-
-headers = {
-	"Accept": "application/json",
-	"Content-Type": "application/json",
-	"Authorization": bearer
-}
+headers = api.getHeaders()
 
 payload = {
   "cmd": "load-report",

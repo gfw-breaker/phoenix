@@ -50,16 +50,8 @@ def removeUser(uid):
 
 
 ## main
-
-authToken = api.getToken()
-bearer = "Bearer %s" % authToken
 url = "%s/ipoint" % apiEndpoint
-
-headers = {
-	"Accept": "application/json",
-	"Content-Type": "application/json",
-	"Authorization": bearer
-}
+headers = api.getHeaders()
 
 payload = {
   "cmd": "service-a"

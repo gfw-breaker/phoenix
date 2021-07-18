@@ -9,15 +9,8 @@ apiEndpoint = os.environ.get('FREE_ENDPOINT')
 
 
 ## main
-authToken = api.getToken()
-bearer = "Bearer %s" % authToken
 url = "%s/ipoint" % apiEndpoint
-
-headers = {
-	"Accept": "application/json",
-	"Content-Type": "application/json",
-	"Authorization": bearer
-}
+headers = api.getHeaders()
 
 payload = {
   "cmd": "domain"
@@ -32,7 +25,6 @@ except Exception as e:
 	print('failed')
 	sys.exit(2)
 
-#print(r.json())
 
 for item in r.json()['data']:
 	path = item['path']

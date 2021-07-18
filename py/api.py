@@ -1,7 +1,7 @@
 #!/usr/bin/python3
-# author: gfw-breaker
 
 import sys, json, uuid, requests, os, hashlib
+
 
 identifier = os.environ.get('FREE_IDENTIFIER')
 password = os.environ.get('FREE_PASSWORD')
@@ -21,8 +21,14 @@ payload = {
 }
 
 
-def getToken():
-	return apiToken
+def getHeaders():
+	bearer = "Bearer %s" % apiToken
+	headers = {
+		"Accept": "application/json",
+		"Content-Type": "application/json",
+		"Authorization": bearer
+	}
+	return headers
 
 
 def generateToken():
@@ -37,6 +43,7 @@ def getNodeMd5(ip):
 	return hashlib.md5(ip.encode("utf-8")).hexdigest()
 
 
+## main
 if __name__ == '__main__':
 	print(generateToken())
 

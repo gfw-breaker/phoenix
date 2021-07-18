@@ -1,13 +1,14 @@
 #!/usr/bin/python3
 # author: gfw-breaker
 
-import sys, json, uuid, requests, os, distutils
+import sys, json, uuid, requests, os
 import api
 
 apiEndpoint = os.environ.get('FREE_ENDPOINT')
 fastFlag = os.environ.get('FREE_FASTNODE')
 
 node = api.getNodeMd5(sys.argv[1])
+
 
 def getUserData():
 	dataMap = {}
@@ -29,16 +30,8 @@ def isFast():
 
 
 ## main
-authToken = api.getToken()
-print("token:" + authToken)
-bearer = "Bearer %s" % authToken
 url = "%s/ipoint" % apiEndpoint
-
-headers = {
-	"Accept": "application/json",
-	"Content-Type": "application/json",
-	"Authorization": bearer
-}
+headers = api.getHeaders()
 
 payload = {
   "cmd": "data-report",
