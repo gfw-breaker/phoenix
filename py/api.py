@@ -1,11 +1,12 @@
 #!/usr/bin/python3
 # author: gfw-breaker
 
-import sys, json, uuid, requests, os
+import sys, json, uuid, requests, os, hashlib
 
 identifier = os.environ.get('FREE_IDENTIFIER')
 password = os.environ.get('FREE_PASSWORD')
 apiEndpoint = os.environ.get('FREE_ENDPOINT')
+apiToken = os.environ.get('FREE_API_TOKEN')
 
 
 url = "%s/vlogin" % apiEndpoint
@@ -21,12 +22,22 @@ payload = {
 
 
 def getToken():
+	return apiToken
+
+
+def generateToken():
 	r = requests.post(url, headers=headers, data=json.dumps(payload))
 	if r.status_code == 400:
 		raise Exception('API Gateway error: vlogin')
 	token = r.json()['token']
-	#print(token)
 	return token
 
+
+def getNodeMd5(ip):
+	return hashlib.md5(ip.encode("utf-8")).hexdigest()
+
+
+if __name__ == '__main__':
+	print(generateToken())
 
 

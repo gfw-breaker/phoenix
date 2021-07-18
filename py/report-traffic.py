@@ -1,12 +1,13 @@
 #!/usr/bin/python3
 # author: gfw-breaker
 
-import sys, json, uuid, requests, os
+import sys, json, uuid, requests, os, distutils
 import api
 
 apiEndpoint = os.environ.get('FREE_ENDPOINT')
-node = sys.argv[1]
+fastFlag = os.environ.get('FREE_FASTNODE')
 
+node = api.getNodeMd5(sys.argv[1])
 
 def getUserData():
 	dataMap = {}
@@ -23,11 +24,15 @@ def logFailure(info):
 	f.close()
 
 
+def isFast():
+	return fastFlag.lower() in ("yes", "true")
+
+
+## main
 authToken = api.getToken()
 print("token:" + authToken)
 bearer = "Bearer %s" % authToken
 url = "%s/ipoint" % apiEndpoint
-userData = getUserData()
 
 headers = {
 	"Accept": "application/json",
@@ -38,8 +43,8 @@ headers = {
 payload = {
   "cmd": "data-report",
   "node": node,
-  "fast": True,
-  "data": userData
+  "fast": isFast(),
+  "data": getUserData()
 }
 
 print(payload)

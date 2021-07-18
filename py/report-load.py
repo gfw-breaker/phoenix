@@ -6,7 +6,8 @@ import api, subprocess, math
 
 apiEndpoint = os.environ.get('FREE_ENDPOINT')
 bandwidth = os.environ.get('FREE_BANDWIDTH')
-node = sys.argv[1]
+
+node = api.getNodeMd5(sys.argv[1])
 
 
 if bandwidth is None:
@@ -32,7 +33,6 @@ def getLoad():
 	avgLoad = outSpeed / (bandwidth* 10) 
 	return math.ceil(avgLoad)
 
-#print(getLoad())
 
 authToken = api.getToken()
 print("token:" + authToken)
